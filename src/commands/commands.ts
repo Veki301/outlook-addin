@@ -3,18 +3,7 @@
 
 // 1. How to construct online meeting details.
 // Not shown: How to get the meeting organizer's ID and other details from your service.
-const newBody =
-  "<br>" +
-  '<a href="https://contoso.com/meeting?id=123456789" target="_blank">Join Contoso meeting</a>' +
-  "<br><br>" +
-  "Phone Dial-in: +1(123)456-7890" +
-  "<br><br>" +
-  "Meeting ID: 123 456 789" +
-  "<br><br>" +
-  "Want to test your video connection?" +
-  "<br><br>" +
-  '<a href="https://contoso.com/testmeeting" target="_blank">Join test meeting</a>' +
-  "<br><br>";
+const newBody = "<br/><p>Wire<p>";
 
 let mailboxItem;
 

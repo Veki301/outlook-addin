@@ -4,8 +4,8 @@
   <Version>1.0.0.0</Version>
   <ProviderName>Wire</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
-  <DisplayName DefaultValue="outlook-wire-addin"/>
-  <Description DefaultValue="A template to get started."/>
+  <DisplayName DefaultValue="Wire"/>
+  <Description DefaultValue="Wire integration for outlook."/>
   <IconUrl DefaultValue="https://localhost:3000/assets/icon-64.png"/>
   <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/icon-128.png"/>
   <SupportUrl DefaultValue="https://localhost:3000/support.html"/>
@@ -65,6 +65,21 @@
                     <FunctionName>insertContosoMeeting</FunctionName>
                   </Action>
                 </Control>
+                <Control xsi:type="Button" id="settingsButton">
+                  <Label resid="TaskpaneButton.Label"/>
+                  <Supertip>
+                    <Title resid="TaskpaneButton.Label"/>
+                    <Description resid="TaskpaneButton.Tooltip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="icon-16"/>
+                    <bt:Image size="32" resid="icon-32"/>
+                    <bt:Image size="80" resid="icon-80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <SourceLocation resid="Taskpane.Url"/>
+                  </Action>
+                </Control>
               </Group>
             </OfficeTab>
           </ExtensionPoint>
@@ -73,21 +88,24 @@
     </Hosts>
     <Resources>
       <bt:Images>
-        <bt:Image id="icon-16" DefaultValue="https://contoso.com/assets/icon-16.png"/>
-        <bt:Image id="icon-32" DefaultValue="https://contoso.com/assets/icon-32.png"/>
-        <bt:Image id="icon-48" DefaultValue="https://contoso.com/assets/icon-48.png"/>
-        <bt:Image id="icon-64" DefaultValue="https://contoso.com/assets/icon-64.png"/>
-        <bt:Image id="icon-80" DefaultValue="https://contoso.com/assets/icon-80.png"/>
+        <bt:Image id="icon-16" DefaultValue="https://localhost:3000/assets/icon-16.png"/>
+        <bt:Image id="icon-32" DefaultValue="https://localhost:3000/assets/icon-32.png"/>
+        <bt:Image id="icon-48" DefaultValue="https://localhost:3000/assets/icon-48.png"/>
+        <bt:Image id="icon-64" DefaultValue="https://localhost:3000/assets/icon-64.png"/>
+        <bt:Image id="icon-80" DefaultValue="https://localhost:3000/assets/icon-80.png"/>
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="residFunctionFile" DefaultValue="https://contoso.com/commands.html"/>
+        <bt:Url id="residFunctionFile" DefaultValue="https://localhost:3000/commands.html"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://localhost:3000/taskpane.html"/>
       </bt:Urls>
       <bt:ShortStrings>
-        <bt:String id="residDescription" DefaultValue="Contoso meeting"/>
-        <bt:String id="residLabel" DefaultValue="Add a contoso meeting"/>
+        <bt:String id="residDescription" DefaultValue="Wire"/>
+        <bt:String id="TaskpaneButton.Label" DefaultValue="Settings"/>
+        <bt:String id="residLabel" DefaultValue="Add link to Wire"/>
       </bt:ShortStrings>
       <bt:LongStrings>
-        <bt:String id="residTooltip" DefaultValue="Add a contoso meeting to this appointment."/>
+        <bt:String id="residTooltip" DefaultValue="Add Wire meeting to this appointment."/>
+        <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Opens a pane displaying all available properties."/>
       </bt:LongStrings>
     </Resources>
   </VersionOverrides>
