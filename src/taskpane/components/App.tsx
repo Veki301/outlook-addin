@@ -69,9 +69,6 @@ export default class App extends React.Component<AppProps, AppState> {
           message="Wire for Outlook"
         />
         <HeroList message="Wire plugin for Outlook" items={[]}>
-          {/* <p className="ms-font-l">
-            Modify the source files, then click <b>Run</b>.
-          </p> */}
           <DefaultButton className="ms-welcome__action" iconProps={{ iconName: "ChevronRight" }} onClick={this.click}>
             Create meeting
           </DefaultButton>

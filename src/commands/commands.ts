@@ -1,16 +1,18 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 /* global global, Office, console */
 
+import { createGroupConversation, createGroupLink } from "../api/api";
+
+// Office is ready. Init
+Office.onReady(function () {
+  mailboxItem = Office.context.mailbox.item;
+});
+
 // 1. How to construct online meeting details.
 // Not shown: How to get the meeting organizer's ID and other details from your service.
 const newBody = "<br/><p>Wire<p>";
 
 let mailboxItem;
-
-// Office is ready.
-Office.onReady(function () {
-  mailboxItem = Office.context.mailbox.item;
-});
 
 // 2. How to define and register a function command named `insertContosoMeeting` (referenced in the manifest)
 //    to update the meeting body with the online meeting details.
@@ -25,8 +27,6 @@ function insertContosoMeeting(event) {
     }
   });
 }
-// Register the function.
-Office.actions.associate("insertContosoMeeting", insertContosoMeeting);
 
 // 3. How to implement a supporting function `updateBody`
 //    that appends the online meeting details to the current body of the meeting.
@@ -45,3 +45,53 @@ function updateBody(event, existingBody) {
     }
   );
 }
+
+function appendDisclaimerOnSend(event) {
+  // Calls the getTypeAsync method and passes its returned value to the options.coercionType parameter of the appendOnSendAsync call.
+  mailboxItem.body.getTypeAsync(
+    {
+      asyncContext: event,
+    },
+    (asyncResult) => {
+      if (asyncResult.status === Office.AsyncResultStatus.Failed) {
+        console.log(asyncResult.error.message);
+        return;
+      }
+
+      // Sets the disclaimer to be appended to the body of the message on send.
+      const bodyFormat = asyncResult.value;
+      let meetingLink = "<p> test append on send </p>";
+
+      mailboxItem.body.appendOnSendAsync(
+        meetingLink,
+        {
+          asyncContext: asyncResult.asyncContext,
+          coercionType: bodyFormat,
+        },
+        async (asyncResult) => {
+          if (asyncResult.status === Office.AsyncResultStatus.Failed) {
+            console.log(asyncResult.error.message);
+            return;
+          }
+
+          await createGroupConversation("Success-Outlook").then((r) => {
+            console.log("ovo bi trebao biti conv id", r);
+            createGroupLink(r).then((r) => {
+              console.log("ovo bi trebao biti link za grupu", r);
+              console.log("asyncResult", asyncResult);
+              meetingLink = `<a href="${r}">${r}</a>`;
+
+              asyncResult.asyncContext.completed();
+            });
+          });
+
+          console.log("The disclaimer will be appended when the mail item is sent.");
+        }
+      );
+    }
+  );
+}
+
+// Register the functions.
+Office.actions.associate("insertContosoMeeting", insertContosoMeeting);
+Office.actions.associate("appendDisclaimerOnSend", appendDisclaimerOnSend);
