@@ -2,12 +2,14 @@
 /* global global, fetch, console */
 
 // TODO: should not be hardcoded
-const teamId = "e1684e2f-39d8-4caf-8e11-0da24a46280b";
+const teamIdStaging = "6da5733c-e610-48cf-917c-a8d27ec89d72";
+//const teamId = "e1684e2f-39d8-4caf-8e11-0da24a46280b";
 ////////////////////////////////
 
-const apiUrl = "https://prod-nginz-https.wire.com/v2";
+const apiUrl = "https://staging-nginz-https.zinfra.io/v2";
 const token =
-  "V9pZekTUZjrlasBWdtD97LMmX8g5cFP4fsMiWdfAcR3P7XKvKc3BswcSsMt_SrRcb-oq-PgI7EtZ0ct5l3NaBg==.v=1.k=1.d=1676454684.t=a.l=.u=0a2203f9-b0c2-4dfe-a349-f668dfd1397b.c=18248128201865300892";
+  "t-2mAc5kax9GA-Zhx8NbiMvFfcN8uEaDaViOQ7IdGAMh9BN6rrHPG134uW2CYkPmsP9T-JdjuVsNPnlDOloeAQ==.v=1.k=1.d=1676634583.t=a.l=.u=b8486973-0b59-4dcf-89eb-a362817fcc31.c=17398943149433977354";
+
 export async function createGroupConversation(name: string) {
   const payload = {
     access: ["invite", "code"],
@@ -19,7 +21,7 @@ export async function createGroupConversation(name: string) {
     receipt_mode: 1,
     team: {
       managed: false,
-      teamid: teamId,
+      teamid: teamIdStaging,
     },
     users: [],
   };
@@ -27,15 +29,12 @@ export async function createGroupConversation(name: string) {
   // TODO: any/model
   const response: any = await fetch(apiUrl + "/conversations", {
     method: "POST",
-    //mode: "no-cors",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(payload),
-  });
-
-  console.log(response, response.body);
+  }).then((r) => r.json());
 
   return response.id;
 }
@@ -44,13 +43,11 @@ export async function createGroupLink(conversationId: string) {
   // TODO: any/model
   const response: any = await fetch(apiUrl + `/conversations/${conversationId}/code`, {
     method: "POST",
-    //mode: "no-cors",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-  });
+  }).then((r) => r.json());
 
-  console.log(response);
   return response.data.uri;
 }
