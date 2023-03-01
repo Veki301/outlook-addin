@@ -1,52 +1,34 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 /* global global, Office, console */
 
-//import { createGroupConversation, createGroupLink } from "../api/api";
+import { createGroupConversation, createGroupLink } from "../api/api";
+//import { appendToBody, getBody, getSubject } from "../utils/mailbox";
 
 // Office is ready. Init
 Office.onReady(function () {
   mailboxItem = Office.context.mailbox.item;
 });
 
-// 1. How to construct online meeting details.
-// Not shown: How to get the meeting organizer's ID and other details from your service.
-const newBody = "<br/><p>Wire<p>";
-
+const defaultSubjectValue = "New Appointment";
 let mailboxItem;
 
-// 2. How to define and register a function command named `insertContosoMeeting` (referenced in the manifest)
-//    to update the meeting body with the online meeting details.
-function insertContosoMeeting(event) {
-  // Get HTML body from the client.
-  mailboxItem.body.getAsync("html", { asyncContext: event }, function (getBodyResult) {
-    if (getBodyResult.status === Office.AsyncResultStatus.Succeeded) {
-      updateBody(getBodyResult.asyncContext, getBodyResult.value);
-    } else {
-      console.error("Failed to get HTML body.");
-      getBodyResult.asyncContext.completed({ allowEvent: false });
-    }
+function test() {
+  getSubject(mailboxItem, (subject) => {
+    createGroupConversation(subject ?? defaultSubjectValue).then((r) => {
+      createGroupLink(r).then((r) => {
+        const groupLink = `<a href="${r}">${r}</a>`;
+        appendToBody(mailboxItem, groupLink);
+      });
+    });
   });
+
+  // maybe can be done better ?
+  // createMeetingLinkElement().then((meetingLink) => {
+  //   appendToBody(mailboxItem, meetingLink);
+  // });
 }
 
-// 3. How to implement a supporting function `updateBody`
-//    that appends the online meeting details to the current body of the meeting.
-function updateBody(event, existingBody) {
-  // Append new body to the existing body.
-  mailboxItem.body.setAsync(
-    existingBody + newBody,
-    { asyncContext: event, coercionType: "html" },
-    function (setBodyResult) {
-      if (setBodyResult.status === Office.AsyncResultStatus.Succeeded) {
-        setBodyResult.asyncContext.completed({ allowEvent: true });
-      } else {
-        console.error("Failed to set HTML body.");
-        setBodyResult.asyncContext.completed({ allowEvent: false });
-      }
-    }
-  );
-}
-
-async function appendDisclaimerOnSend(event) {
+function appendDisclaimerOnSend(event) {
   // Calls the getTypeAsync method and passes its returned value to the options.coercionType parameter of the appendOnSendAsync call.
   mailboxItem.body.getTypeAsync(
     {
@@ -82,7 +64,8 @@ async function appendDisclaimerOnSend(event) {
   );
 }
 
-// WIP
+// UTILS
+
 // async function createMeetingLinkElement() {
 //   return await createGroupConversation("Success-Outlook").then((r) => {
 //     createGroupLink(r).then((r) => {
@@ -91,6 +74,51 @@ async function appendDisclaimerOnSend(event) {
 //   });
 // }
 
+/** Returns value of current mailbox item subject, must pass a callback function to receive value */
+export async function getSubject(item, callback) {
+  const { subject } = item;
+
+  await subject.getAsync(function (asyncResult) {
+    if (asyncResult.status == Office.AsyncResultStatus.Failed) {
+      console.error("Failed to get item subject");
+    } else {
+      callback(asyncResult.value);
+    }
+  });
+}
+
+/** Returns value of current mailbox item body, must pass a callback function to receive value*/
+export async function getBody(item, callback) {
+  const { body } = item;
+
+  await body.getAsync(Office.CoercionType.Html, function (asyncResult) {
+    if (asyncResult.status === Office.AsyncResultStatus.Failed) {
+      console.error("Failed to get HTML body.");
+    } else {
+      callback(asyncResult.value);
+    }
+  });
+}
+
+export function setBody(item, newBody) {
+  const { body } = item;
+  const type = { coercionType: Office.CoercionType.Html };
+
+  body.setAsync(newBody, type, function (asyncResult) {
+    if (asyncResult.status === Office.AsyncResultStatus.Failed) {
+      console.error("Failed to set HTML body.", asyncResult.error.message);
+    } else {
+      // do something else perhaps?
+    }
+  });
+}
+
+export function appendToBody(item, contentToAppend) {
+  getBody(item, (currentBody) => {
+    setBody(item, currentBody + contentToAppend);
+  });
+}
+
 // Register the functions.
-Office.actions.associate("insertContosoMeeting", insertContosoMeeting);
+Office.actions.associate("test", test);
 Office.actions.associate("appendDisclaimerOnSend", appendDisclaimerOnSend);

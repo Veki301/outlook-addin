@@ -8,7 +8,7 @@ const teamIdStaging = "6da5733c-e610-48cf-917c-a8d27ec89d72";
 
 const apiUrl = "https://staging-nginz-https.zinfra.io/v2";
 const token =
-  "t-2mAc5kax9GA-Zhx8NbiMvFfcN8uEaDaViOQ7IdGAMh9BN6rrHPG134uW2CYkPmsP9T-JdjuVsNPnlDOloeAQ==.v=1.k=1.d=1676634583.t=a.l=.u=b8486973-0b59-4dcf-89eb-a362817fcc31.c=17398943149433977354";
+  "bMvGsd_cPN2h86zNdYsyZKeMvcYmt_buzDuKg36Vyg-Wclql3qgdvRZzkVzZG8Tkw9yN-puW9l6FheCSiXs9Cg==.v=1.k=1.d=1677686158.t=a.l=.u=af00d8c1-2db0-4c9b-9325-8bd6b99ec33f.c=10010104069689456709";
 
 export async function createGroupConversation(name: string) {
   const payload = {

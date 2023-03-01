@@ -67,7 +67,7 @@
                     <bt:Image size="80" resid="icon-80"/>
                   </Icon>
                   <Action xsi:type="ExecuteFunction">
-                    <FunctionName>insertContosoMeeting</FunctionName>
+                    <FunctionName>test</FunctionName>
                   </Action>
                 </Control>
 
@@ -125,7 +125,7 @@
       <bt:ShortStrings>
         <bt:String id="residDescription" DefaultValue="Wire"/>
         <bt:String id="TaskpaneButton.Label" DefaultValue="Settings"/>
-        <bt:String id="residLabel" DefaultValue="Add link to Wire"/>
+        <bt:String id="residLabel" DefaultValue="Test"/>
         <bt:String id="AppendButton.Label" DefaultValue="Append disclaimer on send"/>
       </bt:ShortStrings>
       <bt:LongStrings>
